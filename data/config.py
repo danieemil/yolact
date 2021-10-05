@@ -55,6 +55,11 @@ COCO_LABEL_MAP = { 1:  1,  2:  2,  3:  3,  4:  4,  5:  5,  6:  6,  7:  7,  8:  8
                   82: 73, 84: 74, 85: 75, 86: 76, 87: 77, 88: 78, 89: 79, 90: 80}
 
 
+CUSTOM_CLASSES  = ('stuff', 'lyrics')
+
+CUSTOM_LABEL_MAP= {1:1, 2:2}
+
+
 
 # ----------------------- CONFIG CLASS ----------------------- #
 
@@ -173,7 +178,19 @@ pascal_sbd_dataset = dataset_base.copy({
 })
 
 
+my_custom_dataset = dataset_base.copy({
+    'name': 'My Musical Dataset',
 
+    'train_images': './data/coco/data_coco/JPEGImages/',
+    'train_info':   './data/coco/data_coco/annotations.json',
+
+    'valid_images': './data/coco/data_coco/JPEGImages/',
+    'valid_info':   './data/coco/data_coco/annotations.json',
+
+    'has_gt': True,
+    'class_names': CUSTOM_CLASSES,
+    'label_map': CUSTOM_LABEL_MAP,
+})
 
 
 # ----------------------- TRANSFORMS ----------------------- #
@@ -581,7 +598,7 @@ coco_base_config = Config({
     'mask_dim': None,
 
     # Input image size.
-    'max_size': 300,
+    'max_size': 512,
     
     # Whether or not to do post processing on the cpu at test time
     'force_cpu_nms': True,
@@ -657,8 +674,8 @@ yolact_base_config = coco_base_config.copy({
     'name': 'yolact_base',
 
     # Dataset stuff
-    'dataset': coco2017_dataset,
-    'num_classes': len(coco2017_dataset.class_names) + 1,
+    'dataset': my_custom_dataset,
+    'num_classes': len(my_custom_dataset.class_names) + 1,
 
     # Image Size
     'max_size': 550,
@@ -674,7 +691,7 @@ yolact_base_config = coco_base_config.copy({
         'preapply_sqrt': False,
         'use_square_anchors': True, # This is for backward compatability with a bug
 
-        'pred_aspect_ratios': [ [[1, 1/2, 2]] ]*5,
+        'pred_aspect_ratios': [ [[1, 1/2, 8]] ]*5,
         'pred_scales': [[24], [48], [96], [192], [384]],
     }),
 

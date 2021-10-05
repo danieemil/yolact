@@ -90,8 +90,7 @@ if args.dataset is not None:
 
 if args.autoscale and args.batch_size != 8:
     factor = args.batch_size / 8
-    if __name__ == '__main__':
-        print('Scaling parameters by %.2f to account for a batch size of %d.' % (factor, args.batch_size))
+    print('Scaling parameters by %.2f to account for a batch size of %d.' % (factor, args.batch_size))
 
     cfg.lr *= factor
     cfg.max_iter //= factor
@@ -113,8 +112,7 @@ if torch.cuda.device_count() == 0:
     exit(-1)
 
 if args.batch_size // torch.cuda.device_count() < 6:
-    if __name__ == '__main__':
-        print('Per-GPU batch size is less than the recommended limit for batch norm. Disabling batch norm.')
+    print('Per-GPU batch size is less than the recommended limit for batch norm. Disabling batch norm.')
     cfg.freeze_bn = True
 
 loss_types = ['B', 'C', 'M', 'P', 'D', 'E', 'S', 'I']
@@ -341,7 +339,7 @@ def train():
                 if args.log:
                     precision = 5
                     loss_info = {k: round(losses[k].item(), precision) for k in losses}
-                    loss_info['T'] = round(loss.item(), precision)
+                    loss_info['T'] = round(losses[k].item(), precision)
 
                     if args.log_gpu:
                         log.log_gpu_stats = (iteration % 10 == 0) # nvidia-smi is sloooow
